@@ -18,8 +18,6 @@ sys.path.append("..")
 if tf.__version__ < '1.4.0':
     raise ImportError('Please upgrade your tensorflow installation to v1.4.* or later!')
 
-# plt.show()
-
 # What model to download.
 MODEL_NAME = 'ssd_mobilenet_v1_coco_2017_11_17'
 MODEL_FILE = MODEL_NAME + '.tar.gz'
@@ -34,13 +32,13 @@ PATH_TO_LABELS = os.path.join('data', 'mscoco_label_map.pbtxt')
 NUM_CLASSES = 90
 
 # Download.
-# opener = urllib.request.URLopener()
-# opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
-# tar_file = tarfile.open(MODEL_FILE)
-# for file in tar_file.getmembers():
-#     file_name = os.path.basename(file.name)
-#     if 'frozen_inference_graph.pb' in file_name:
-#         tar_file.extract(file, os.getcwd())
+opener = urllib.request.URLopener()
+opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
+tar_file = tarfile.open(MODEL_FILE)
+for file in tar_file.getmembers():
+    file_name = os.path.basename(file.name)
+    if 'frozen_inference_graph.pb' in file_name:
+        tar_file.extract(file, os.getcwd())
 
 detection_graph = tf.Graph()
 with detection_graph.as_default():
@@ -141,7 +139,7 @@ for image_path in TEST_IMAGE_PATHS:
         line_thickness=8)
     plt.figure(figsize=IMAGE_SIZE)
     # plt.imshow(image_np)
-    path = ""
+    path = "/home/fan/images"+image_path
     plt.imsave(path, image_np, format='jpg')
 
 

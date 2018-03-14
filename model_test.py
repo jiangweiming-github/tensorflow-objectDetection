@@ -24,13 +24,13 @@ import os
 import numpy as np
 import tensorflow as tf
 
-from object_detection import inputs
-from object_detection import model
-from object_detection import model_hparams
-from object_detection import model_test_util
-from object_detection.builders import model_builder
-from object_detection.core import standard_fields as fields
-from object_detection.utils import config_util
+ import inputs
+ import model
+ import model_hparams
+ import model_test_util
+from builders import model_builder
+from core import standard_fields as fields
+from utils import config_util
 
 FLAGS = tf.flags.FLAGS
 

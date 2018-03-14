@@ -22,10 +22,10 @@ from google.protobuf import text_format
 
 from tensorflow.core.example import example_pb2
 from tensorflow.core.example import feature_pb2
-from object_detection.builders import dataset_builder
-from object_detection.core import standard_fields as fields
-from object_detection.protos import input_reader_pb2
-from object_detection.utils import dataset_util
+from builders import dataset_builder
+from core import standard_fields as fields
+from protos import input_reader_pb2
+from utils import dataset_util
 
 
 class DatasetBuilderTest(tf.test.TestCase):

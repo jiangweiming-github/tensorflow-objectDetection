@@ -3,7 +3,7 @@ import os
 
 import tensorflow as tf
 
-from object_detection.utils import json_utils
+from utils import json_utils
 
 
 class JsonUtilsTest(tf.test.TestCase):

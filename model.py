@@ -32,18 +32,18 @@ import tensorflow as tf
 from google.protobuf import text_format
 from tensorflow.contrib.learn.python.learn import learn_runner
 from tensorflow.contrib.tpu.python.tpu import tpu_optimizer
-from object_detection import eval_util
-from object_detection import inputs
-from object_detection import model_hparams
-from object_detection.builders import model_builder
-from object_detection.builders import optimizer_builder
-from object_detection.core import standard_fields as fields
-from object_detection.metrics import coco_evaluation
-from object_detection.utils import config_util
-from object_detection.utils import label_map_util
-from object_detection.utils import shape_utils
-from object_detection.utils import variables_helper
-from object_detection.utils import visualization_utils as vis_utils
+ import eval_util
+ import inputs
+ import model_hparams
+from builders import model_builder
+from builders import optimizer_builder
+from core import standard_fields as fields
+from metrics import coco_evaluation
+from utils import config_util
+from utils import label_map_util
+from utils import shape_utils
+from utils import variables_helper
+from utils import visualization_utils as vis_utils
 
 tf.flags.DEFINE_string('model_dir', None, 'Path to output model directory '
                        'where event and checkpoint files will be written.')

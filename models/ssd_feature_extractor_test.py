@@ -21,7 +21,7 @@ import itertools
 import numpy as np
 import tensorflow as tf
 
-from object_detection.utils import test_case
+from utils import test_case
 
 
 class SsdFeatureExtractorTestBase(test_case.TestCase):

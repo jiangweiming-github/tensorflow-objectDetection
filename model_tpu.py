@@ -31,11 +31,11 @@ from tensorflow.contrib.tpu.python.tpu import tpu_config
 from tensorflow.contrib.tpu.python.tpu import tpu_estimator
 from tensorflow.contrib.training.python.training import evaluation
 
-from object_detection import inputs
-from object_detection import model
-from object_detection import model_hparams
-from object_detection.builders import model_builder
-from object_detection.utils import config_util
+ import inputs
+ import model
+ import model_hparams
+from builders import model_builder
+from utils import config_util
 
 tf.flags.DEFINE_bool('use_tpu', True, 'Use TPUs rather than plain CPUs')
 

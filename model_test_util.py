@@ -21,8 +21,8 @@ import tempfile
 import tensorflow as tf
 
 
-from object_detection import model
-from object_detection import model_hparams
+ import model
+ import model_hparams
 
 FLAGS = tf.flags.FLAGS
 

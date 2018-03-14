@@ -24,10 +24,10 @@ import os
 import numpy as np
 import tensorflow as tf
 
-from object_detection import inputs
-from object_detection.core import preprocessor
-from object_detection.core import standard_fields as fields
-from object_detection.utils import config_util
+ import inputs
+from core import preprocessor
+from core import standard_fields as fields
+from utils import config_util
 
 FLAGS = tf.flags.FLAGS
 

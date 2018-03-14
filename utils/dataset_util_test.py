@@ -18,8 +18,8 @@
 import os
 import tensorflow as tf
 
-from object_detection.protos import input_reader_pb2
-from object_detection.utils import dataset_util
+from protos import input_reader_pb2
+from utils import dataset_util
 
 
 class DatasetUtilTest(tf.test.TestCase):
