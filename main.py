@@ -138,9 +138,10 @@ for image_path in TEST_IMAGE_PATHS:
         use_normalized_coordinates=True,
         line_thickness=8)
     plt.figure(figsize=IMAGE_SIZE)
-    # plt.imshow(image_np)
-    path = "/home/fan/images"+image_path
-    plt.imsave(path, image_np, format='jpg')
+    plt.imshow(image_np)
+    plt.show()
+    # path = "/home/fan/images"+image_path
+    # plt.imsave(path, image_np, format='jpg')
 
 
 
