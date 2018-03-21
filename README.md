@@ -8,9 +8,10 @@
 pip install tensorflow
 # For GPU
 pip install tensorflow-gpu
-sudo pip install pillow
-sudo pip install lxml
-sudo pip install matplotlib
+sudo pip3 install pillow
+sudo pip3 install lxml
+sudo pip3 install matplotlib
+sudo pip3 install protobuf
 ```
 
 配置好环境，修改main.py中的最后的path变量即可直接运行此示例。
