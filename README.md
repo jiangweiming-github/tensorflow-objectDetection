@@ -8,6 +8,7 @@
 pip install tensorflow
 # For GPU
 pip install tensorflow-gpu
+sudo apt-get install tk-dev
 sudo pip3 install pillow
 sudo pip3 install lxml
 sudo pip3 install matplotlib
