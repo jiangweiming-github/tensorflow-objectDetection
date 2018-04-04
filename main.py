@@ -1,15 +1,17 @@
+import numpy as np
 import os
+import six.moves.urllib as urllib
 import sys
 import tarfile
-
-import numpy as np
-import six.moves.urllib as urllib
 import tensorflow as tf
-from PIL import Image
+import zipfile
+from collections import defaultdict
+from io import StringIO
 
+from PIL import Image
 from utils import label_map_util
-from utils import visualization_utils as vis_util
 from utils import ops as utils_ops
+from utils import visualization_utils as vis_util
 from matplotlib import pyplot as plt
 
 # This is needed since the notebook is stored in the object_detection folder.
@@ -31,7 +33,7 @@ PATH_TO_LABELS = os.path.join('data', 'mscoco_label_map.pbtxt')
 
 NUM_CLASSES = 90
 
-# Download.
+# download the model and extract it
 opener = urllib.request.URLopener()
 opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
 tar_file = tarfile.open(MODEL_FILE)
@@ -40,6 +42,7 @@ for file in tar_file.getmembers():
     if 'frozen_inference_graph.pb' in file_name:
         tar_file.extract(file, os.getcwd())
 
+# set the tf.Graph
 detection_graph = tf.Graph()
 with detection_graph.as_default():
     od_graph_def = tf.GraphDef()
@@ -65,12 +68,13 @@ def load_image_into_numpy_array(image):
 # image2.jpg
 # If you want to test the code with your images, just add path to the images to the TEST_IMAGE_PATHS.
 PATH_TO_TEST_IMAGES_DIR = 'test_images'
-TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, 'image{}.jpg'.format(i)) for i in range(1, 3)]
+TEST_IMAGE_PATHS = [os.path.join(PATH_TO_TEST_IMAGES_DIR, 'image{}.jpg'.format(i)) for i in range(1, 5)]
 
 # Size, in inches, of the output images.
 IMAGE_SIZE = (12, 8)
 
 
+# inference single image
 def run_inference_for_single_image(image, graph):
     with graph.as_default():
         with tf.Session() as sess:
@@ -84,8 +88,7 @@ def run_inference_for_single_image(image, graph):
             ]:
                 tensor_name = key + ':0'
                 if tensor_name in all_tensor_names:
-                    tensor_dict[key] = tf.get_default_graph().get_tensor_by_name(
-                        tensor_name)
+                    tensor_dict[key] = tf.get_default_graph().get_tensor_by_name(tensor_name)
             if 'detection_masks' in tensor_dict:
                 # The following processing is only for single image
                 detection_boxes = tf.squeeze(tensor_dict['detection_boxes'], [0])
@@ -109,8 +112,7 @@ def run_inference_for_single_image(image, graph):
 
             # all outputs are float32 numpy arrays, so convert types as appropriate
             output_dict['num_detections'] = int(output_dict['num_detections'][0])
-            output_dict['detection_classes'] = output_dict[
-                'detection_classes'][0].astype(np.uint8)
+            output_dict['detection_classes'] = output_dict['detection_classes'][0].astype(np.uint8)
             output_dict['detection_boxes'] = output_dict['detection_boxes'][0]
             output_dict['detection_scores'] = output_dict['detection_scores'][0]
             if 'detection_masks' in output_dict:
@@ -118,8 +120,41 @@ def run_inference_for_single_image(image, graph):
     return output_dict
 
 
+# image size (for onclick() to compute x,y)
+XSize, YSize = 1, 1
+# box_to_display_str_map
+data = {}
+
+
+# mouse click event to display the object category
+def onclick(event):
+    if event.xdata is not None and event.ydata is not None:
+        print(event.xdata / XSize, ' ', event.ydata / YSize, ' ')
+        x, y = event.xdata / XSize, event.ydata / YSize
+        keyset = data.keys()
+        keylist = []
+        for key in keyset:
+            ymin, xmin, ymax, xmax = key
+            if ymin <= y <= ymax and xmin <= x <= xmax:
+                keylist.append(key)
+        if len(keylist) > 1:
+            areaMin = 99999
+            Key = ()
+            for key in keylist:
+                ymin, xmin, ymax, xmax = key
+                area = (xmax - xmin) * (ymax - ymin)
+                if area < areaMin:
+                    areaMin = area
+                    Key = key
+            print(str(data[Key]))
+        elif len(keylist) > 0:
+            print(str(data[keylist[0]]))
+
+
+# read the image 
 for image_path in TEST_IMAGE_PATHS:
     image = Image.open(image_path)
+    XSize, YSize = image.size
     # the array based representation of the image will be used later in order to prepare the
     # result image with boxes and labels on it.
     image_np = load_image_into_numpy_array(image)
@@ -128,7 +163,7 @@ for image_path in TEST_IMAGE_PATHS:
     # Actual detection.
     output_dict = run_inference_for_single_image(image_np, detection_graph)
     # Visualization of the results of a detection.
-    vis_util.visualize_boxes_and_labels_on_image_array(
+    data = vis_util.visualize_boxes_and_labels_on_image_array(
         image_np,
         output_dict['detection_boxes'],
         output_dict['detection_classes'],
@@ -137,12 +172,10 @@ for image_path in TEST_IMAGE_PATHS:
         instance_masks=output_dict.get('detection_masks'),
         use_normalized_coordinates=True,
         line_thickness=8)
-    plt.figure(figsize=IMAGE_SIZE)
+    fig = plt.figure(figsize=IMAGE_SIZE)
     plt.imshow(image_np)
+    fig.canvas.mpl_connect('button_press_event', onclick)
     plt.show()
-    # path = "/home/fan/images"+image_path
-    # plt.imsave(path, image_np, format='jpg')
-
-
-
-
+    # save image
+    # path = "/Users/keensun/Desktop/python/" + image_path
+    # plt.imsave(path, image_np, format="jpg")
