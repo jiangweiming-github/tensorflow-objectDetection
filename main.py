@@ -176,6 +176,4 @@ for image_path in TEST_IMAGE_PATHS:
     plt.imshow(image_np)
     fig.canvas.mpl_connect('button_press_event', onclick)
     plt.show()
-    # save image
-    # path = "" + image_path
-    # plt.imsave(path, image_np, format="jpg")
+   
